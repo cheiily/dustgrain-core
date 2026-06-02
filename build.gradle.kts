@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "one.cheily"
-version = "3.0.0"
+version = "3.0.1"
 
 repositories {
     mavenCentral()
@@ -19,6 +19,7 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:1.5.32")
     testImplementation("org.wiremock:wiremock:3.3.1")
     testImplementation("io.kotest:kotest-extensions-wiremock:6.1.7")
+    testImplementation("io.mockk:mockk:1.14.11")
 
     // core
     implementation("org.jsoup:jsoup:1.17.2")

@@ -11,6 +11,7 @@ import one.cheily.dustgrain.core.config.getHttpClient
 import one.cheily.dustgrain.core.config.loadConfig
 import one.cheily.dustgrain.core.fetching.DataFetchService
 import io.ktor.client.HttpClient
+import one.cheily.dustgrain.core.gamemodule.GameModules
 
 object Application {
     lateinit var profile: AppProfile private set
@@ -19,6 +20,7 @@ object Application {
     lateinit var httpClient: HttpClient private set
     lateinit var dataFetchService: DataFetchService private set
     lateinit var dataHeaderCache: DataHeaderCache private set
+    lateinit var gameModules: GameModules private set
 
     @JvmOverloads
     fun initialize(profile: AppProfile, appConfig: AppConfig = loadConfig()) {
@@ -32,5 +34,6 @@ object Application {
             CacheMode.PERSISTENT -> PersistentDataHeaderCache(dataFetchService)
             CacheMode.NOOP -> NoopDataHeaderCache(dataFetchService)
         }
+        this.gameModules = GameModules()
     }
 }
