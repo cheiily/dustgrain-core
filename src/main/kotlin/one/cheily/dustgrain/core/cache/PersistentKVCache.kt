@@ -4,7 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import java.nio.file.Path
 
 open class PersistentKVCache<K, V>(
-    val directory: String,
+    val directory: Path,
     override val provider: SuspendingCacheEntryProvider<K, V>,
     val keyCodec: Codec<K, String>,
     val valueCodec: Codec<V, String>,
@@ -14,7 +14,7 @@ open class PersistentKVCache<K, V>(
     private val logger = KotlinLogging.logger {}
 
     private val cache = EntryPersistor(
-        directory = Path.of(directory),
+        directory = directory,
         version = version
     )
 

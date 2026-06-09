@@ -1,28 +1,37 @@
 package dustgrain.core.formatting
 
 import dustgrain.core.ApiMockTest
-import one.cheily.dustgrain.core.domain.DataField
-import one.cheily.dustgrain.core.domain.DataHeader
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.nulls.shouldNotBeNull
+import one.cheily.dustgrain.core.domain.DataField
+import one.cheily.dustgrain.core.domain.DataHeader
+import one.cheily.dustgrain.core.domain.DataStruct
 import one.cheily.dustgrain.core.formatting.FormatterRef
 
 class FormattingServiceMockTest : ApiMockTest({
-    val someSingleDataField = DataField(
-        name = "someDataField",
-        type = "someType",
-        content = "someContent"
-    )
-    val someListDataField = DataField(
-        name = "someListDataField",
-        type = "someType",
-        content = "someContent1;someContent2;someContent3"
-    )
-
     fun FormatterRef.toSomeDataHeader(delimiter: String? = null) = DataHeader(
         name = "someDataField",
         type = this,
         delimiter = delimiter
+    )
+
+    val someSingleDataField = DataField(
+        content = "someContent",
+        header = FormatterRef.PASS.toSomeDataHeader()
+    )
+
+    val someListDataField = DataField(
+        content = "someContent1;someContent2;someContent3",
+        header = FormatterRef.PASS.toSomeDataHeader(delimiter = ";")
+    )
+
+    val someDataStruct = DataStruct(
+        structureName = "someDataStruct",
+        fields = listOf(
+            someSingleDataField,
+            someListDataField
+        )
     )
 
     val allDataHeaders = FormatterRef.entries.map(FormatterRef::toSomeDataHeader)
@@ -30,16 +39,16 @@ class FormattingServiceMockTest : ApiMockTest({
     feature("FormattingService#matchFormat") {
         scenario("matches reference to formatter") {
             FormatterRef.IMAGE.toSomeDataHeader().let {
-                mockFormattingService.matchFormat(someSingleDataField, it) shouldBeEqual mockFormattingService.formatImage
+                mockFormattingService.matchFormat(it) shouldBeEqual mockFormattingService.formatImage
             }
             FormatterRef.PASS.toSomeDataHeader().let {
-                mockFormattingService.matchFormat(someSingleDataField, it) shouldBeEqual mockFormattingService.formatPass
+                mockFormattingService.matchFormat(it) shouldBeEqual mockFormattingService.formatPass
             }
             FormatterRef.PASS_ERROR.toSomeDataHeader().let {
-                mockFormattingService.matchFormat(someSingleDataField, it) shouldBeEqual mockFormattingService.formatErrorPass
+                mockFormattingService.matchFormat(it) shouldBeEqual mockFormattingService.formatErrorPass
             }
             FormatterRef.WIKITEXT.toSomeDataHeader().let {
-                mockFormattingService.matchFormat(someSingleDataField, it) shouldBeEqual mockFormattingService.formatWikitext
+                mockFormattingService.matchFormat(it) shouldBeEqual mockFormattingService.formatWikitext
             }
         }
     }
@@ -47,25 +56,25 @@ class FormattingServiceMockTest : ApiMockTest({
     feature("FormattingService#formatPass") {
         scenario("parses single item content") {
             // given
-            val data = someSingleDataField to FormatterRef.PASS.toSomeDataHeader()
+            val data = someSingleDataField
 
             // when
             val result = mockFormattingService.formatPass.format(data)
 
             // then
-            result.name shouldBeEqual someSingleDataField.name
+            result.header.name shouldBeEqual someSingleDataField.header.name
             result.contents shouldBeEqual listOf(someSingleDataField.content)
         }
 
         scenario("parses list content") {
             // given
-            val data = someListDataField to FormatterRef.PASS.toSomeDataHeader(delimiter = ";")
+            val data = someListDataField
 
             // when
             val result = mockFormattingService.formatPass.format(data)
 
             // then
-            result.name shouldBeEqual someListDataField.name
+            result.header.name shouldBeEqual someListDataField.header.name
             result.contents shouldBeEqual listOf("someContent1", "someContent2", "someContent3")
         }
     }
@@ -73,25 +82,25 @@ class FormattingServiceMockTest : ApiMockTest({
     feature("FormattingService#formatErrorPass") {
         scenario("parses single item content") {
             // given
-            val data = someSingleDataField to FormatterRef.PASS_ERROR.toSomeDataHeader()
+            val data = someSingleDataField.copy(header = FormatterRef.PASS_ERROR.toSomeDataHeader())
 
             // when
             val result = mockFormattingService.formatErrorPass.format(data)
 
             // then
-            result.name shouldBeEqual someSingleDataField.name
+            result.header.name shouldBeEqual someSingleDataField.header.name
             result.contents shouldBeEqual listOf(someSingleDataField.content)
         }
 
         scenario("parses list content as single item") {
             // given
-            val data = someListDataField to FormatterRef.PASS_ERROR.toSomeDataHeader(delimiter = ";")
+            val data = someListDataField.copy(header = FormatterRef.PASS_ERROR.toSomeDataHeader(delimiter = ";"))
 
             // when
             val result = mockFormattingService.formatErrorPass.format(data)
 
             // then
-            result.name shouldBeEqual someListDataField.name
+            result.header.name shouldBeEqual someListDataField.header.name
             result.contents shouldBeEqual listOf(someListDataField.content)
         }
     }
@@ -100,25 +109,26 @@ class FormattingServiceMockTest : ApiMockTest({
         scenario("parses single item content") {
             // given
             thereIsImageData("1")
-            val data = someSingleDataField to FormatterRef.IMAGE.toSomeDataHeader()
+            val data = someSingleDataField.copy(header = FormatterRef.IMAGE.toSomeDataHeader())
 
             // when
             val result = mockFormattingService.formatImage.format(data)
 
             // then
-            result.name shouldBeEqual someSingleDataField.name
+            result.header.name shouldBeEqual someSingleDataField.header.name
             result.contents shouldBeEqual listOf("https://www.dustloop.com/wiki/images/e/e8/BBCF_Noel_Vermillion_d623D.png")
         }
 
         scenario("parses list content") {
             // given
-            val data = someListDataField to FormatterRef.IMAGE.toSomeDataHeader(delimiter = ";")
+            thereIsImageData("1")
+            val data = someListDataField.copy(header = FormatterRef.IMAGE.toSomeDataHeader(delimiter = ";"))
 
             // when
             val result = mockFormattingService.formatImage.format(data)
 
             // then
-            result.name shouldBeEqual someListDataField.name
+            result.header.name shouldBeEqual someListDataField.header.name
             result.contents shouldBeEqual listOf(
                 "https://www.dustloop.com/wiki/images/e/e8/BBCF_Noel_Vermillion_d623D.png",
                 "https://www.dustloop.com/wiki/images/e/e8/BBCF_Noel_Vermillion_d623D.png",
@@ -128,39 +138,58 @@ class FormattingServiceMockTest : ApiMockTest({
     }
 
     feature("FormattingService#formatWikitext") {
-        scenario("is not implemented yet") {
+        scenario("parses content as plain text") {
             // given
-            val data = someSingleDataField to FormatterRef.WIKITEXT.toSomeDataHeader()
+            val data = someSingleDataField.copy(header = FormatterRef.WIKITEXT.toSomeDataHeader())
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
 
             // then
-            shouldThrow<NotImplementedError> {
-                mockFormattingService.formatWikitext.format(data)
-                TODO()
-            }
+            result.header.name shouldBeEqual data.header.name
+            result.contents shouldBeEqual listOf(data.content)
         }
     }
 
-    feature("FormattingService#format") {
+    feature("FormattingService#format for DataField") {
         scenario("formats data according to header type") {
             // given
             thereIsImageData("1")
-            val data = listOf(
-                someSingleDataField to FormatterRef.PASS.toSomeDataHeader(),
-                someSingleDataField to FormatterRef.PASS_ERROR.toSomeDataHeader(),
-                someSingleDataField to FormatterRef.IMAGE.toSomeDataHeader(),
-                // todo #14
-//                someSingleDataField to FormatterRef.WIKITEXT.toSomeDataHeader()
-            )
+            val dataPass = someSingleDataField.copy(header = FormatterRef.PASS.toSomeDataHeader())
+            val dataError = someSingleDataField.copy(header = FormatterRef.PASS_ERROR.toSomeDataHeader())
+            val dataImage = someSingleDataField.copy(header = FormatterRef.IMAGE.toSomeDataHeader())
+            // todo #14
+//            val dataWikitext = someSingleDataField.copy(header = FormatterRef.WIKITEXT.toSomeDataHeader())
+
+            // when
+            val resultPass = mockFormattingService.format(dataPass)
+            val resultError = mockFormattingService.format(dataError)
+            val resultImage = mockFormattingService.format(dataImage)
+//            val resultWikitext = mockFormattingService.format(dataWikitext)
+
+
+            // then
+            resultPass.contents shouldBeEqual listOf(someSingleDataField.content)
+            resultError.contents shouldBeEqual listOf(someSingleDataField.content)
+            resultImage.contents shouldBeEqual listOf("https://www.dustloop.com/wiki/images/e/e8/BBCF_Noel_Vermillion_d623D.png")
+//            resultWikitext.contents shouldBeEqual listOf(someSingleDataField.content)
+        }
+    }
+
+    feature("FormattingService#format for DataStruct") {
+        scenario("formats all fields in the structure") {
+            // given
+            val data = someDataStruct
 
             // when
             val result = mockFormattingService.format(data)
 
             // then
-            result.size shouldBeEqual 3
-            result[0].contents shouldBeEqual listOf(someSingleDataField.content)
-            result[1].contents shouldBeEqual listOf(someSingleDataField.content)
-            result[2].contents shouldBeEqual listOf("https://www.dustloop.com/wiki/images/e/e8/BBCF_Noel_Vermillion_d623D.png")
-
+            result.structureName.shouldNotBeNull()
+            result.structureName shouldBeEqual "someDataStruct"
+            result.grains.size shouldBeEqual 2
+            result.grains[0].contents shouldBeEqual listOf(someSingleDataField.content)
+            result.grains[1].contents shouldBeEqual listOf("someContent1", "someContent2", "someContent3")
         }
     }
 })

@@ -1,7 +1,11 @@
 package one.cheily.dustgrain.core.domain
 
 data class DataField(
-    val name: String,
-    val type: String,
     val content: String,
+    val header: DataHeader
+)
+
+data class DataStruct(
+    val fields: List<DataField>,
+    val structureName: String?
 )

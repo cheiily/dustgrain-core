@@ -1,0 +1,30 @@
+{
+    "cargofields": {
+        "name": {
+            "type": "String"
+        },
+        "health": {
+            "type": "Wikitext string",
+            "size": "64"
+        },
+        "prejump": {
+            "type": "Wikitext string",
+            "size": "64"
+        },
+        "backdash": {
+            "type": "Wikitext string"
+        },
+        "forwarddash": {
+            "type": "Wikitext string"
+        },
+        "umo": {
+            "type": "Wikitext"
+        },
+        "portrait": {
+            "type": "File"
+        },
+        "icon": {
+            "type": "File"
+        }
+    }
+}

@@ -1,0 +1,137 @@
+{
+  "cargofields": {
+    "chara": {
+      "type": "String",
+      "size": "64"
+    },
+    "name": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "input": {
+      "type": "Wikitext string",
+      "size": "64"
+    },
+    "damage": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "guard": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "startup": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "active": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "recovery": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "onBlock": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "onODR": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "attribute": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "invuln": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "cancel": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "p1": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "p2": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "starter": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "level": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "blockstun": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "groundHit": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "airHit": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "groundCH": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "airCH": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "blockstop": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "hitstop": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "CHstop": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "cancelTiming": {
+      "type": "Wikitext string",
+      "size": "128"
+    },
+    "images": {
+      "type": "File",
+      "isList": "",
+      "delimiter": ";"
+    },
+    "caption": {
+      "type": "Wikitext string",
+      "isList": "",
+      "delimiter": "\\"
+    },
+    "hitboxes": {
+      "type": "File",
+      "isList": "",
+      "delimiter": ";"
+    },
+    "hitboxCaption": {
+      "type": "Wikitext string",
+      "isList": "",
+      "delimiter": "\\"
+    },
+    "type": {
+      "type": "String",
+      "size": "64"
+    },
+    "notes": {
+      "type": "Wikitext",
+      "isList": "",
+      "delimiter": ";"
+    }
+  }
+}

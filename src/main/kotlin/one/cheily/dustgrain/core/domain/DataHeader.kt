@@ -8,4 +8,6 @@ data class DataHeader(
     val name: String,
     val type: FormatterRef,
     val delimiter: String?
-)
+) {
+    val nameFormatted get() = name.replace("_", " ")
+}

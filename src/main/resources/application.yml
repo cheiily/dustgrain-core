@@ -1,15 +1,16 @@
 app_info:
   name: "DustGrain"
-  version: "3.0.1"
+  version: "3.1.0"
   author: "cheily"
 
 cache:
-  version: 1
-  max_age_seconds: 86400
-  mode: PERSISTENT
+  headers:
+    version: 1
+    max_age_seconds: 86400
+    mode: PERSISTENT
 
 client:
   url: "https://dustloop.com/wiki/api.php"
   timeout: 10000
-  user_agent: "DustGrain 3.0.1-devel (https://github.com/cheiily/DustGrain; public@cheily.one) ktor-client-cio/3.4.1"
+  user_agent: "DustGrain 3.1.0-devel (https://github.com/cheiily/DustGrain; software@cheily.one) ktor-client-cio/3.4.1"
 

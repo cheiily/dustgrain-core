@@ -31,8 +31,8 @@ abstract class ApiMockTest(body: ApiMockTest.() -> Unit = {}) : ComponentMockTes
         wiremockServer.stop()
     }
 
-    fun thereAreCargoTables() {
-        val resourcePath = "/dustgrain/core/fetching/cargotables.json"
+    fun thereAreCargoTables(directory: String = "fetching") {
+        val resourcePath = "/dustgrain/core/$directory/cargotables.json"
         val content = javaClass.getResource(resourcePath)?.readText()
             ?: throw RuntimeException("Resource not found: $resourcePath")
 
@@ -47,8 +47,8 @@ abstract class ApiMockTest(body: ApiMockTest.() -> Unit = {}) : ComponentMockTes
         )
     }
 
-    fun thereAreCargoFields(tableName: String) {
-        val resourcePath = "/dustgrain/core/fetching/cargofields_$tableName.json"
+    fun thereAreCargoFields(tableName: String, directory: String = "fetching") {
+        val resourcePath = "/dustgrain/core/$directory/cargofields_$tableName.json"
         val content = javaClass.getResource(resourcePath)?.readText()
             ?: throw RuntimeException("Resource not found: $resourcePath")
 
@@ -80,8 +80,8 @@ abstract class ApiMockTest(body: ApiMockTest.() -> Unit = {}) : ComponentMockTes
         )
     }
 
-    fun thereIsACargoQueryResult(variant: String) {
-        val resourcePath = "/dustgrain/core/fetching/cargoquery_$variant.json"
+    fun thereIsACargoQueryResult(variant: String, directory: String = "fetching") {
+        val resourcePath = "/dustgrain/core/$directory/cargoquery_$variant.json"
         val content = javaClass.getResource(resourcePath)?.readText()
             ?: throw RuntimeException("Resource not found: $resourcePath")
 

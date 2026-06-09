@@ -10,6 +10,7 @@ import one.cheily.dustgrain.core.cache.PersistentKVCache
 import one.cheily.dustgrain.core.cache.StringCodec
 import one.cheily.dustgrain.core.cache.SuspendingCacheEntryProvider
 import java.io.File
+import java.nio.file.Path
 
 class PersistentKVCacheTest : FeatureSpec({
 
@@ -21,7 +22,7 @@ class PersistentKVCacheTest : FeatureSpec({
     }
 
     lateinit var tempDir : File
-    fun getCache() = PersistentKVCache(tempDir.path, someProvider(), keyCodec, valueCodec, 1, 3)
+    fun getCache() = PersistentKVCache(Path.of(tempDir.path), someProvider(), keyCodec, valueCodec, 1, 3)
     lateinit var cache : PersistentKVCache<String, String>
 
     beforeEach {
@@ -91,12 +92,12 @@ class PersistentKVCacheTest : FeatureSpec({
     feature("persistence") {
         scenario("should persist data between cache instances") {
             // given
-            val cache1 = PersistentKVCache(tempDir.path, someProvider(), keyCodec, valueCodec, 1, 10)
+            val cache1 = PersistentKVCache(Path.of(tempDir.path), someProvider(), keyCodec, valueCodec, 1, 10)
             cache1.set("key1", "persistent value")
 
             // when
             // Create a new cache instance pointing to the same directory
-            val cache2 = PersistentKVCache(tempDir.path, someProvider(), keyCodec, valueCodec, 1, 10)
+            val cache2 = PersistentKVCache(Path.of(tempDir.path), someProvider(), keyCodec, valueCodec, 1, 10)
             val value = cache2.get("key1")
 
             // then
@@ -107,7 +108,7 @@ class PersistentKVCacheTest : FeatureSpec({
     feature("eviction") {
         scenario("should evict entries that are too old") {
             // given
-            val cache = PersistentKVCache(tempDir.path, someProvider(), keyCodec, valueCodec, 1, 1)
+            val cache = PersistentKVCache(Path.of(tempDir.path), someProvider(), keyCodec, valueCodec, 1, 1)
             cache.set("key1", "value1")
 
             // then

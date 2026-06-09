@@ -1,12 +1,13 @@
 app_info:
   name: "DustGrain"
-  version: "3.0.1"
+  version: "3.1.0"
   author: "cheily"
 
 cache:
-  version: 1
-  max_age_seconds: 86400
-  mode: PERSISTENT
+  headers:
+    version: 1
+    max_age_seconds: 86400
+    mode: PERSISTENT
 
 client:
   url: "https://dustloop.com/api.php"

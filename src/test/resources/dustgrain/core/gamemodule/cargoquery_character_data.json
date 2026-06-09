@@ -1,0 +1,30 @@
+{
+  "cargoquery": [
+    {
+      "title": {
+        "name": "Djeeta",
+        "health": "16000",
+        "prejump": "4F",
+        "backdash": "18F Duration<br>3-16F Airborne",
+        "umo": "",
+        "portrait": "GBVSR Djeeta Portrait.png",
+        "icon": "GBVSR Djeeta Icon.png",
+        "walk speed": "9.8",
+        "backwalk speed": "6.7",
+        "dash initial speed": "12",
+        "dash acceleration": "0.57",
+        "jump height": "42",
+        "f jump distance": "9.5",
+        "b jump distance": "9.5",
+        "jump gravity": "2.15",
+        "superjump height": "60",
+        "f superjump distance": "13.5",
+        "b superjump distance": "13.5",
+        "superjump gravity": "2.4",
+        "close l range": "102.5",
+        "close m range": "142.5",
+        "close h range": "172.5"
+      }
+    }
+  ]
+}
