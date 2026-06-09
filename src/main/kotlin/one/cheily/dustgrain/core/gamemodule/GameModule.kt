@@ -178,7 +178,7 @@ class GameModules(
             fetchService.getTableData(TableDataRequest(
                 tables = listOf(moveTable),
                 fields = headers.map { it.name },
-                where = "$charHeader = \"$character\" AND $customHeader LIKE \"%$value%\""
+                where = "$charHeader = \"$character\" AND $customHeader = \"$value\""
             )).map { entries ->
                 DataStruct(
                     structureName = "moveData",
