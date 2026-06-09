@@ -1,0 +1,72 @@
+{
+  "cargofields": {
+    "name": {
+      "type": "String",
+      "size": "64"
+    },
+    "health": {
+      "type": "Integer"
+    },
+    "prejump": {
+      "type": "String",
+      "size": "32"
+    },
+    "backdash": {
+      "type": "Wikitext string"
+    },
+    "umo": {
+      "type": "Wikitext string"
+    },
+    "portrait": {
+      "type": "File"
+    },
+    "icon": {
+      "type": "File"
+    },
+    "walk_speed": {
+      "type": "Float"
+    },
+    "backwalk_speed": {
+      "type": "Float"
+    },
+    "dash_initial_speed": {
+      "type": "Float"
+    },
+    "dash_acceleration": {
+      "type": "Float"
+    },
+    "jump_height": {
+      "type": "Float"
+    },
+    "f_jump_distance": {
+      "type": "Float"
+    },
+    "b_jump_distance": {
+      "type": "Float"
+    },
+    "jump_gravity": {
+      "type": "Float"
+    },
+    "superjump_height": {
+      "type": "Float"
+    },
+    "f_superjump_distance": {
+      "type": "Float"
+    },
+    "b_superjump_distance": {
+      "type": "Float"
+    },
+    "superjump_gravity": {
+      "type": "Float"
+    },
+    "close_l_range": {
+      "type": "Float"
+    },
+    "close_m_range": {
+      "type": "Float"
+    },
+    "close_h_range": {
+      "type": "Float"
+    }
+  }
+}

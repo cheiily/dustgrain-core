@@ -34,9 +34,14 @@ class ConfigTest : FeatureSpec({
             }
         }
 
-        scenario("should fail with invalid format method reference") {
-            logger.warn { "TODO: parse method references and throw on miss" }
-            true shouldBe true
+        scenario("should fail with invalid config structure") {
+            shouldThrow<ConfigException> {
+                ConfigLoaderBuilder.default()
+                    .addResourceSource(RESOURCE_PATH + "application-invalid-format.yml")
+                    .addDecoder(AppConfig.TableFieldFormatDecoder())
+                    .build()
+                    .loadConfigOrThrow<AppConfig>()
+            }
         }
     }
 })

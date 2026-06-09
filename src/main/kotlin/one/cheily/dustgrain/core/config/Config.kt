@@ -39,6 +39,10 @@ data class AppConfig(
 
     //====================cache====================
     data class Cache(
+        val headers: CacheConf,
+    )
+
+    data class CacheConf(
         val version: Int,
         val maxAgeSeconds: Long,
         val mode: CacheMode

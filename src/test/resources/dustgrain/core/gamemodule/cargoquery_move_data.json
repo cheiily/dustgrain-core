@@ -1,0 +1,30 @@
+{
+  "cargoquery": [
+    {
+      "title": {
+        "chara": "Djeeta",
+        "name": "M Reginleiv",
+        "input": "236M",
+        "damage": "800",
+        "guard": "All",
+        "startup": "16",
+        "active": "",
+        "recovery": "Total 47",
+        "onBlock": "<span style=\"color: \n#c71c1b\" >'''-7'''</span>",
+        "onHit": "<span style=\"color: Tomato\" >'''-3'''</span>",
+        "onCH": "<span style=\"color: Tomato\" >'''-1'''</span>",
+        "meter": "",
+        "level": "2",
+        "invuln": "",
+        "cooldown": "20F after contact or disappear",
+        "cls": "2",
+        "images": "GBVSR_Djeeta_236X.png",
+        "caption": "&#32;",
+        "hitboxes": "",
+        "hitboxCaption": "",
+        "type": "special",
+        "notes": ""
+      }
+    }
+  ]
+}

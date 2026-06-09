@@ -8,38 +8,47 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import one.cheily.dustgrain.core.Application
+import one.cheily.dustgrain.core.domain.DataSpike
+import one.cheily.dustgrain.core.domain.DataStruct
 
 class FormattingService(
-    val dataFetchService: DataFetchService
+    val dataFetchService: DataFetchService = Application.dataFetchService
 ) {
     val logger = KotlinLogging.logger{}
 
 
-    fun format(data: List<Pair<DataField, DataHeader>>): List<DataGrain> =
+    fun format(data: List<DataField>): List<DataGrain> =
         data.map {
-            matchFormat(it.first, it.second)
+            matchFormat(it.header)
                 .format(it)
         }
 
+    fun format(data: DataStruct) = DataSpike(
+        structureName = data.structureName,
+        grains = data.fields.map { format(it) }
+    )
+    fun format(data: DataField): DataGrain = matchFormat(data.header).format(data)
+
 
     // ========== Formatter Implementations ==========
-    val formatPass = Formatter { (data, head) ->
+    val formatPass = Formatter { data ->
         DataGrain(
-            name = data.name,
-            contents = head.parseList(data.content)
+            header = data.header,
+            contents = data.parseList(data.content)
         )
     }
 
-    val formatErrorPass = Formatter { (data, head) ->
-        logger.warn { "Unknown cargo type: ${data.type}" }
+    val formatErrorPass = Formatter { data ->
+        logger.warn { "Unknown cargo type in formatting! Header: ${data.header}" }
         DataGrain(
-            name = data.name,
+            header = data.header,
             contents = listOf(data.content)
         )
     }
 
-    val formatImage = Formatter { (data, head) ->
-        val filenames = head.parseList(data.content)
+    val formatImage = Formatter { data ->
+        val filenames = data.parseList(data.content)
         val fileUrls = runBlocking {
                 filenames.map { async {
                     dataFetchService.getImageUrl(it)
@@ -47,20 +56,20 @@ class FormattingService(
             }
 
         DataGrain(
-            name = data.name,
+            header = data.header,
             contents = fileUrls
         )
     }
 
-    val formatWikitext = Formatter { (data, head) ->
+    val formatWikitext = Formatter { data ->
         logger.warn { "wikitext formatting is a TODO feature" }
-        formatPass.format(data to head)
+        formatPass.format(data)
 //        TODO("See issue #14")
     }
 
 
     // ========== Misc ==========
-    fun matchFormat(data: DataField, header: DataHeader): Formatter =
+    fun matchFormat(header: DataHeader): Formatter =
         when (header.type) {
             FormatterRef.IMAGE -> formatImage
             FormatterRef.WIKITEXT -> formatWikitext
@@ -69,11 +78,11 @@ class FormattingService(
         }
 
 
-    private fun DataHeader.parseList(content: String): List<String> =
-        if (delimiter == null)
+    private fun DataField.parseList(content: String): List<String> =
+        if (header.delimiter == null)
             listOf(content)
         else
-            content.split(delimiter)
+            content.split(header.delimiter)
 
 }
 

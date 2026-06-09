@@ -1,0 +1,34 @@
+{
+  "cargoquery": [
+    {
+      "title": {
+        "name": "1st Air Dash",
+        "input": "j.66/44"
+      }
+    },
+    {
+      "title": {
+        "name": "1st Ground Dash",
+        "input": "66/44"
+      }
+    },
+    {
+      "title": {
+        "name": "1st Hit Lv1 / 2 / 3",
+        "input": "236236D"
+      }
+    },
+    {
+      "title": {
+        "name": "1st Hit LvG",
+        "input": "236236D LvG"
+      }
+    },
+    {
+      "title": {
+        "name": "214D Additional Attack",
+        "input": "214D~236A"
+      }
+    }
+  ]
+}

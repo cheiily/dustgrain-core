@@ -16,7 +16,11 @@ class ApplicationMockTest : ApiMockTest({
             // given
             val modifiedConfig = mockConfig.copy(
                 appInfo = mockConfig.appInfo.copy(name = "renamed-app"),
-                cache = mockConfig.cache.copy(mode = CacheMode.IN_MEMORY, maxAgeSeconds = 42L),
+                cache = mockConfig.cache.copy(
+                    headers = mockConfig.cache.headers.copy(
+                        mode = CacheMode.IN_MEMORY, maxAgeSeconds = 42L
+                    )
+                ),
                 client = mockConfig.client.copy(userAgent = "custom-agent")
             )
             wiremockServer.stubFor(

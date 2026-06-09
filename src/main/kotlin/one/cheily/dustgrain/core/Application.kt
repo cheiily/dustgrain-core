@@ -11,6 +11,7 @@ import one.cheily.dustgrain.core.config.getHttpClient
 import one.cheily.dustgrain.core.config.loadConfig
 import one.cheily.dustgrain.core.fetching.DataFetchService
 import io.ktor.client.HttpClient
+import one.cheily.dustgrain.core.formatting.FormattingService
 import one.cheily.dustgrain.core.gamemodule.GameModules
 
 object Application {
@@ -20,6 +21,7 @@ object Application {
     lateinit var httpClient: HttpClient private set
     lateinit var dataFetchService: DataFetchService private set
     lateinit var dataHeaderCache: DataHeaderCache private set
+    lateinit var formattingService: FormattingService private set
     lateinit var gameModules: GameModules private set
 
     @JvmOverloads
@@ -29,11 +31,12 @@ object Application {
 
         this.httpClient = getHttpClient()
         this.dataFetchService = DataFetchService()
-        this.dataHeaderCache = when (appConfig.cache.mode) {
+        this.dataHeaderCache = when (appConfig.cache.headers.mode) {
             CacheMode.IN_MEMORY -> InMemoryDataHeaderCache(dataFetchService)
             CacheMode.PERSISTENT -> PersistentDataHeaderCache(dataFetchService)
             CacheMode.NOOP -> NoopDataHeaderCache(dataFetchService)
         }
+        this.formattingService = FormattingService()
         this.gameModules = GameModules()
     }
 }

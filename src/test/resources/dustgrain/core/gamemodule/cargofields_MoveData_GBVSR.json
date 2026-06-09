@@ -1,0 +1,82 @@
+{
+  "cargofields": {
+    "chara": {
+      "type": "String"
+    },
+    "name": {
+      "type": "String"
+    },
+    "input": {
+      "type": "Wikitext string",
+      "size": "64"
+    },
+    "damage": {
+      "type": "Wikitext"
+    },
+    "guard": {
+      "type": "Wikitext string"
+    },
+    "startup": {
+      "type": "Wikitext string"
+    },
+    "active": {
+      "type": "Wikitext string"
+    },
+    "recovery": {
+      "type": "Wikitext string"
+    },
+    "onBlock": {
+      "type": "Wikitext"
+    },
+    "onHit": {
+      "type": "Wikitext"
+    },
+    "onCH": {
+      "type": "Wikitext string"
+    },
+    "meter": {
+      "type": "Wikitext string"
+    },
+    "level": {
+      "type": "Wikitext string"
+    },
+    "invuln": {
+      "type": "Wikitext string"
+    },
+    "cooldown": {
+      "type": "Wikitext string"
+    },
+    "cls": {
+      "type": "Wikitext string"
+    },
+    "images": {
+      "type": "File",
+      "isList": "",
+      "delimiter": "\\"
+    },
+    "caption": {
+      "type": "Wikitext",
+      "isList": "",
+      "delimiter": "\\"
+    },
+    "hitboxes": {
+      "type": "File",
+      "isList": "",
+      "delimiter": "\\"
+    },
+    "hitboxCaption": {
+      "type": "Wikitext",
+      "isList": "",
+      "delimiter": "\\"
+    },
+    "type": {
+      "type": "Wikitext string",
+      "size": "64"
+    },
+    "notes": {
+      "type": "Wikitext",
+      "isList": "",
+      "delimiter": "\\"
+    }
+  }
+}

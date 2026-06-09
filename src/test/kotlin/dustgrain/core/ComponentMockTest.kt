@@ -26,9 +26,11 @@ abstract class ComponentMockTest(body: ComponentMockTest.() -> Unit = {}) : Feat
                 author = "test-author"
             ),
             cache = AppConfig.Cache(
-                version = 1,
-                maxAgeSeconds = 3600L,
-                mode = CacheMode.NOOP
+                headers = AppConfig.CacheConf(
+                    version = 1,
+                    maxAgeSeconds = 3600L,
+                    mode = CacheMode.NOOP
+                )
             ),
             client = AppConfig.Client(
                 url = URI.create(mockUrl).toURL(),
@@ -55,6 +57,13 @@ abstract class ComponentMockTest(body: ComponentMockTest.() -> Unit = {}) : Feat
 
     val mockDataFetchService by lazy {
         DataFetchService(client = mockDustloopClient)
+    }
+
+    val mockDataHeaderCache: one.cheily.dustgrain.core.cache.DataHeaderCache by lazy {
+        one.cheily.dustgrain.core.cache.InMemoryDataHeaderCache(
+            dataFetchService = mockDataFetchService,
+            appConfig = mockConfig
+        )
     }
 
     val mockFormattingService by lazy {

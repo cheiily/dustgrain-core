@@ -4,9 +4,10 @@ app_info:
   author: "cheily"
 
 cache:
-  version: 1
-  max_age_seconds: 86400
-  mode: PERSISTENT
+  headers:
+    version: 1
+    max_age_seconds: 86400
+    mode: PERSISTENT
 
 client:
   url: "https://dustloop.com/wiki/api.php"

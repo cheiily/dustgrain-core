@@ -4,9 +4,10 @@ app_info:
   author: "cheily"
 
 cache:
-  version: 1
-  max_age_seconds: 86400
-  mode: NOOP
+  headers:
+    version: 1
+    max_age_seconds: 86400
+    mode: NOOP
 
 client:
   url: "https://localhost:12345"
