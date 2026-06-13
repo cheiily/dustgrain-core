@@ -8,4 +8,7 @@ data class DataGrain(
 data class DataSpike(
     val grains: List<DataGrain>,
     val structureName: String?
-)
+) {
+    fun getGrain(name: String) = grains.firstOrNull { it.header.name == name }
+    operator fun get(name: String) = getGrain(name)
+}
