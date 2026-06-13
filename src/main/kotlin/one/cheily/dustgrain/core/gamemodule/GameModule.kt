@@ -128,7 +128,8 @@ class GameModules(
                 ?: return@let null
             val nameHeader = findHeader(moveTable, "name")
             val inputHeader = findHeader(moveTable, "input")
-            val fieldHeaders = listOfNotNull(nameHeader, inputHeader)
+            val typeHeader = findHeader(moveTable, "type")
+            val fieldHeaders = listOfNotNull(nameHeader, inputHeader, typeHeader)
             val fields = fieldHeaders.map { it.name }
 
             if (fields.isEmpty()) return@let null
@@ -226,7 +227,8 @@ class GameModules(
                 return@let null
             val nameHeader = findHeader(moveTable, "name")
             val inputHeader = findHeader(moveTable, "input")
-            val fieldHeaders = listOfNotNull(nameHeader, inputHeader)
+            val typeHeader = findHeader(moveTable, "type")
+            val fieldHeaders = listOfNotNull(nameHeader, inputHeader, typeHeader)
             val fields = fieldHeaders.map { it.name }
 
             if (fields.isEmpty()) return@let null
