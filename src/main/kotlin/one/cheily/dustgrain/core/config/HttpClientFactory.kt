@@ -12,6 +12,7 @@ import io.ktor.serialization.JsonConvertException
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.util.*
 import kotlinx.serialization.json.Json
+import one.cheily.dustgrain.core.DustloopApiException
 
 fun getHttpClient(
     appProfile: AppProfile = Application.profile,
