@@ -48,6 +48,14 @@ class FormattingService(
     }
 
     val formatImage = Formatter { data ->
+        if (data.content.isBlank()) {
+            logger.info { "Skipping blank image url. Header: ${data.header}" }
+            return@Formatter DataGrain(
+                header = data.header,
+                contents = emptyList()
+            )
+        }
+
         val filenames = data.parseList(data.content)
         val fileUrls = runBlocking {
                 filenames.map { async {
