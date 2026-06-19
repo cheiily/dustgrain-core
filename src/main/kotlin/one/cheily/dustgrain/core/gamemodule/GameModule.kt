@@ -106,7 +106,7 @@ class GameModules(
             ).firstOrNull()
                 ?.filter { it.value != null }
                 ?.mapNotNull { (key, value) ->
-                    headers.firstOrNull { header -> header.nameFormatted == key }
+                    headers.firstOrNull { header -> header.nameInResponse == key }
                         ?.let {
                             DataField(value!!, it)
                         }
@@ -142,7 +142,7 @@ class GameModules(
                 DataStruct(
                     structureName = "moveData",
                     fields = entries.mapNotNull { entry ->
-                        fieldHeaders.firstOrNull { it.nameFormatted == entry.key }
+                        fieldHeaders.firstOrNull { it.nameInResponse == entry.key }
                             ?.let { DataField(entry.value!!, it) }
                     }
                 )
@@ -184,7 +184,7 @@ class GameModules(
                 DataStruct(
                     structureName = "moveData",
                     fields = entries.mapNotNull { entry ->
-                        headers.firstOrNull { it.nameFormatted == entry.key }
+                        headers.firstOrNull { it.nameInResponse == entry.key }
                             ?.let { DataField(entry.value!!, it) }
                     }
                 )
@@ -208,7 +208,7 @@ class GameModules(
                 DataStruct(
                     structureName = "moveData",
                     fields = entries.mapNotNull { entry ->
-                        headers.firstOrNull { it.nameFormatted == entry.key }
+                        headers.firstOrNull { it.nameInResponse == entry.key }
                             ?.let { DataField(entry.value!!, it) }
                     }
                 )
@@ -241,7 +241,7 @@ class GameModules(
                 DataStruct(
                     structureName = "moveData",
                     fields = entries.mapNotNull { entry ->
-                        fieldHeaders.firstOrNull { it.nameFormatted == entry.key }
+                        fieldHeaders.firstOrNull { it.nameInResponse == entry.key }
                             ?.let { DataField(entry.value!!, it) }
                     }
                 )
@@ -292,7 +292,7 @@ class GameModules(
             ).firstOrNull()
                 ?.filter { it.value != null }
                 ?.mapNotNull { (key, value) ->
-                    headers.firstOrNull { header -> header.nameFormatted == key }
+                    headers.firstOrNull { header -> header.nameInResponse == key }
                         ?.let {
                             DataField(value!!, it)
                         }
@@ -302,6 +302,28 @@ class GameModules(
         } ?: emptyList()
 
     fun getAllCharacterDataByCustomQueryBlocking(game: String, where: String): List<DataGrain> = runBlocking { getAllCharacterDataByCustomQuery(game, where) }
+
+
+    suspend fun listCharactersForMoveTable(game: String): List<String> = getOrLoadModule(game)?.moveTable?.let { moveTable ->
+        val charHeader = findHeader(moveTable, "character", "char")
+            ?: return@let null
+
+        fetchService.getTableData(
+            TableDataRequest(
+                tables = listOf(moveTable),
+                fields = listOf(charHeader.name),
+                groupBy = charHeader.name
+            )
+        ).mapNotNull { struct ->
+            struct[charHeader.nameInResponse]
+        }.map {
+            DataField(it, charHeader)
+        }.let {
+            formattingService.format(it)
+        }.mapNotNull { it.contents.firstOrNull() }
+    } ?: emptyList()
+
+    fun listCharactersForMoveTableBlocking(game: String): List<String> = runBlocking { listCharactersForMoveTable(game) }
 
 
     private suspend fun findHeader(table: String, eq: String, cont: String? = null): DataHeader? =

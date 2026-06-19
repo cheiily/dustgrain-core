@@ -9,5 +9,5 @@ data class DataHeader(
     val type: FormatterRef,
     val delimiter: String?
 ) {
-    val nameFormatted get() = name.replace("_", " ")
+    val nameInResponse get() = name.replace("_", " ")
 }
