@@ -26,7 +26,7 @@ class GameModulesMockTest : ApiMockTest({
             thereIsACargoQueryResult("character_list", directory = "gamemodule")
 
             // when
-            val characters = gameModules.listCharactersBlocking(game)
+            val characters = gameModules.listCharacters(game)
 
             // then
             characters.shouldNotBeEmpty()
@@ -41,7 +41,7 @@ class GameModulesMockTest : ApiMockTest({
             thereAreCargoTables()
 
             // when
-            val characters = gameModules.listCharactersBlocking(game)
+            val characters = gameModules.listCharacters(game)
 
             // then
             characters.shouldBeEmpty()
@@ -60,14 +60,14 @@ class GameModulesMockTest : ApiMockTest({
             thereIsImageData("1")
 
             // when
-            val characterData = gameModules.getAllCharacterDataBlocking(game, character)
+            val characterData = gameModules.getAllCharacterData(game, character)
 
             // then
             characterData.shouldNotBeEmpty()
             characterData.size shouldBe 22
             val health = characterData.first { it.header.name == "health" }
             health.contents.first() shouldBe "16000"
-            characterData.first { it.header.nameFormatted == "close l range" }.contents.first() shouldBe "102.5"
+            characterData.first { it.header.nameInResponse == "close l range" }.contents.first() shouldBe "102.5"
         }
     }
 
@@ -82,7 +82,7 @@ class GameModulesMockTest : ApiMockTest({
             thereIsACargoQueryResult("move_list", directory = "gamemodule")
 
             // when
-            val moves = gameModules.listMovesBlocking(game, character)
+            val moves = gameModules.listMoves(game, character)
 
             // then
             moves.shouldNotBeEmpty()
@@ -108,7 +108,7 @@ class GameModulesMockTest : ApiMockTest({
             thereIsACargoQueryResult("move_data", directory = "gamemodule")
 
             // when
-            val moveData = gameModules.getAllMoveDataByNameBlocking(game, character, moveName)
+            val moveData = gameModules.getAllMoveDataByName(game, character, moveName)
 
             // then
             moveData.shouldNotBeEmpty()
@@ -132,7 +132,7 @@ class GameModulesMockTest : ApiMockTest({
             thereIsACargoQueryResult("move_data", directory = "gamemodule")
 
             // when
-            val moveData = gameModules.getAllMoveDataByInputBlocking(game, character, input)
+            val moveData = gameModules.getAllMoveDataByInput(game, character, input)
 
             // then
             moveData.shouldNotBeEmpty()
@@ -155,7 +155,7 @@ class GameModulesMockTest : ApiMockTest({
             thereIsACargoQueryResult("move_data", directory = "gamemodule")
 
             // when
-            val moveData = gameModules.getAllMoveDataByCustomQueryBlocking(game, where)
+            val moveData = gameModules.getAllMoveDataByCustomQuery(game, where)
 
             // then
             moveData.shouldNotBeEmpty()
@@ -178,7 +178,7 @@ class GameModulesMockTest : ApiMockTest({
             thereIsACargoQueryResult("move_list", directory = "gamemodule")
 
             // when
-            val moves = gameModules.listMovesByCustomQueryBlocking(game, where)
+            val moves = gameModules.listMovesByCustomQuery(game, where)
 
             // then
             moves.shouldNotBeEmpty()
@@ -203,7 +203,7 @@ class GameModulesMockTest : ApiMockTest({
             thereIsACargoQueryResult("character_list", directory = "gamemodule")
 
             // when
-            val characters = gameModules.listCharactersByCustomQueryBlocking(game, where)
+            val characters = gameModules.listCharactersByCustomQuery(game, where)
 
             // then
             characters.shouldNotBeEmpty()
@@ -225,14 +225,34 @@ class GameModulesMockTest : ApiMockTest({
             thereIsImageData("1")
 
             // when
-            val characterData = gameModules.getAllCharacterDataByCustomQueryBlocking(game, where)
+            val characterData = gameModules.getAllCharacterDataByCustomQuery(game, where)
 
             // then
             characterData.shouldNotBeEmpty()
             characterData.size shouldBe 22
             val health = characterData.first { it.header.name == "health" }
             health.contents.first() shouldBe "16000"
-            characterData.first { it.header.nameFormatted == "close l range" }.contents.first() shouldBe "102.5"
+            characterData.first { it.header.nameInResponse == "close l range" }.contents.first() shouldBe "102.5"
+        }
+    }
+
+    feature("listCharactersForMoveTable") {
+        scenario("should return a list of characters for a given move table") {
+            // given
+            val game = "gbvsr"
+            val moveTable = "MoveData_GBVSR"
+            thereAreCargoTables(directory = "gamemodule")
+            thereAreCargoFields(moveTable, directory = "gamemodule")
+            thereIsACargoQueryResult("character_list_movetable", directory = "gamemodule")
+
+            // when
+            val characters = gameModules.listCharactersForMoveTable(game)
+
+            // then
+            characters.shouldNotBeEmpty()
+            characters.size shouldBe 5
+            characters[0] shouldBe "2B"
+            characters[4] shouldBe "Beatrix"
         }
     }
 })
