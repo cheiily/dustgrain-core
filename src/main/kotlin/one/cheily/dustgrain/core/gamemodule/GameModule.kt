@@ -88,10 +88,10 @@ class GameModules(
     fun listCharactersBlocking(game: String): List<String> = runBlocking { listCharacters(game) }
 
 
-    suspend fun getAllCharacterData(game: String, character: String): List<DataGrain> =
+    suspend fun getAllCharacterData(game: String, character: String): List<DataSpike> =
         getOrLoadModule(game)?.charTable?.let { charTable ->
             val headers = dataHeaderCache.getOrLoad(charTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
             val nameHeader = findHeader(charTable, "name")
                 ?.name
@@ -103,25 +103,30 @@ class GameModules(
                     fields = headers.map { it.name },
                     where = "$nameHeader = \"$character\""
                 )
-            ).firstOrNull()
-                ?.filter { it.value != null }
-                ?.mapNotNull { (key, value) ->
-                    headers.firstOrNull { header -> header.nameInResponse == key }
-                        ?.let {
-                            DataField(value!!, it)
+            ).map { entries ->
+                DataStruct(
+                    structureName = "charData",
+                    fields = entries
+                        .filter { it.value != null }
+                        .mapNotNull { (key, value) ->
+                            headers.firstOrNull { header -> header.nameInResponse == key }
+                                ?.let {
+                                    DataField(value!!, it)
+                                }
                         }
-                }?.let {
-                    formattingService.format(it)
-                }
+                )
+            }.map {
+                formattingService.format(it)
+            }
         } ?: emptyList()
 
-    fun getAllCharacterDataBlocking(game: String, character: String): List<DataGrain> = runBlocking { getAllCharacterData(game, character) }
+    fun getAllCharacterDataBlocking(game: String, character: String): List<DataSpike> = runBlocking { getAllCharacterData(game, character) }
 
 
     suspend fun listMoves(game: String, character: String): List<DataSpike> =
         getOrLoadModule(game)?.moveTable?.let { moveTable ->
             val headers = dataHeaderCache.getOrLoad(moveTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
             val charHeader = findHeader(moveTable, "character", "char")
                 ?.name
@@ -167,7 +172,7 @@ class GameModules(
     private suspend fun getAllMoveDataByHeader(game: String, character: String, headerEq: String, value: String, headerCont: String? = null): List<DataSpike> =
         getOrLoadModule(game)?.moveTable?.let { moveTable ->
             val headers = dataHeaderCache.getOrLoad(moveTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
             val charHeader = findHeader(moveTable, "character", "char")
                 ?.name
@@ -197,7 +202,7 @@ class GameModules(
     suspend fun getAllMoveDataByCustomQuery(game: String, where: String): List<DataSpike> =
         getOrLoadModule(game)?.moveTable?.let { moveTable ->
             val headers = dataHeaderCache.getOrLoad(moveTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
 
             fetchService.getTableData(TableDataRequest(
@@ -223,7 +228,7 @@ class GameModules(
     suspend fun listMovesByCustomQuery(game: String, where: String): List<DataSpike> =
         getOrLoadModule(game)?.moveTable?.let { moveTable ->
             val headers = dataHeaderCache.getOrLoad(moveTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
             val nameHeader = findHeader(moveTable, "name")
             val inputHeader = findHeader(moveTable, "input")
@@ -277,10 +282,10 @@ class GameModules(
     fun listCharactersByCustomQueryBlocking(game: String, where: String): List<String> = runBlocking { listCharactersByCustomQuery(game, where) }
 
 
-    suspend fun getAllCharacterDataByCustomQuery(game: String, where: String): List<DataGrain> =
+    suspend fun getAllCharacterDataByCustomQuery(game: String, where: String): List<DataSpike> =
         getOrLoadModule(game)?.charTable?.let { charTable ->
             val headers = dataHeaderCache.getOrLoad(charTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
 
             fetchService.getTableData(
@@ -289,19 +294,24 @@ class GameModules(
                     fields = headers.map { it.name },
                     where = where
                 )
-            ).firstOrNull()
-                ?.filter { it.value != null }
-                ?.mapNotNull { (key, value) ->
-                    headers.firstOrNull { header -> header.nameInResponse == key }
-                        ?.let {
-                            DataField(value!!, it)
+            ).map { entries ->
+                DataStruct(
+                    structureName = "charData",
+                    fields = entries
+                        .filter { it.value != null }
+                        .mapNotNull { (key, value) ->
+                            headers.firstOrNull { header -> header.nameInResponse == key }
+                                ?.let {
+                                    DataField(value!!, it)
+                                }
                         }
-                }?.let {
-                    formattingService.format(it)
-                }
+                )
+            }.map {
+                formattingService.format(it)
+            }
         } ?: emptyList()
 
-    fun getAllCharacterDataByCustomQueryBlocking(game: String, where: String): List<DataGrain> = runBlocking { getAllCharacterDataByCustomQuery(game, where) }
+    fun getAllCharacterDataByCustomQueryBlocking(game: String, where: String): List<DataSpike> = runBlocking { getAllCharacterDataByCustomQuery(game, where) }
 
 
     suspend fun listCharactersForMoveTable(game: String): List<String> = getOrLoadModule(game)?.moveTable?.let { moveTable ->

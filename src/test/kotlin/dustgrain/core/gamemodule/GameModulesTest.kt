@@ -31,7 +31,7 @@ class GameModulesTest : FeatureSpec({
 
     beforeEach {
         fetchService = mockk()
-        gameModules = GameModules(fetchService)
+        gameModules = GameModules(fetchService, mockk(), mockk())
     }
 
     feature("GameModules registration") {
