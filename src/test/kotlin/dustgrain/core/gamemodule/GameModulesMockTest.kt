@@ -2,6 +2,7 @@ package dustgrain.core.gamemodule
 
 import dustgrain.core.ApiMockTest
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import one.cheily.dustgrain.core.gamemodule.GameModules
@@ -60,7 +61,9 @@ class GameModulesMockTest : ApiMockTest({
             thereIsImageData("1")
 
             // when
-            val characterData = gameModules.getAllCharacterData(game, character)
+            val spikes = gameModules.getAllCharacterData(game, character)
+            spikes.shouldHaveSize(1)
+            val characterData = spikes.firstOrNull()!!.grains
 
             // then
             characterData.shouldNotBeEmpty()
@@ -225,7 +228,9 @@ class GameModulesMockTest : ApiMockTest({
             thereIsImageData("1")
 
             // when
-            val characterData = gameModules.getAllCharacterDataByCustomQuery(game, where)
+            val spikes = gameModules.getAllCharacterDataByCustomQuery(game, where)
+            spikes.shouldHaveSize(1)
+            val characterData = spikes.firstOrNull()!!.grains
 
             // then
             characterData.shouldNotBeEmpty()

@@ -91,7 +91,7 @@ class GameModules(
     suspend fun getAllCharacterData(game: String, character: String): List<DataSpike> =
         getOrLoadModule(game)?.charTable?.let { charTable ->
             val headers = dataHeaderCache.getOrLoad(charTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
             val nameHeader = findHeader(charTable, "name")
                 ?.name
@@ -126,7 +126,7 @@ class GameModules(
     suspend fun listMoves(game: String, character: String): List<DataSpike> =
         getOrLoadModule(game)?.moveTable?.let { moveTable ->
             val headers = dataHeaderCache.getOrLoad(moveTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
             val charHeader = findHeader(moveTable, "character", "char")
                 ?.name
@@ -172,7 +172,7 @@ class GameModules(
     private suspend fun getAllMoveDataByHeader(game: String, character: String, headerEq: String, value: String, headerCont: String? = null): List<DataSpike> =
         getOrLoadModule(game)?.moveTable?.let { moveTable ->
             val headers = dataHeaderCache.getOrLoad(moveTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
             val charHeader = findHeader(moveTable, "character", "char")
                 ?.name
@@ -202,7 +202,7 @@ class GameModules(
     suspend fun getAllMoveDataByCustomQuery(game: String, where: String): List<DataSpike> =
         getOrLoadModule(game)?.moveTable?.let { moveTable ->
             val headers = dataHeaderCache.getOrLoad(moveTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
 
             fetchService.getTableData(TableDataRequest(
@@ -228,7 +228,7 @@ class GameModules(
     suspend fun listMovesByCustomQuery(game: String, where: String): List<DataSpike> =
         getOrLoadModule(game)?.moveTable?.let { moveTable ->
             val headers = dataHeaderCache.getOrLoad(moveTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
             val nameHeader = findHeader(moveTable, "name")
             val inputHeader = findHeader(moveTable, "input")
@@ -285,7 +285,7 @@ class GameModules(
     suspend fun getAllCharacterDataByCustomQuery(game: String, where: String): List<DataSpike> =
         getOrLoadModule(game)?.charTable?.let { charTable ->
             val headers = dataHeaderCache.getOrLoad(charTable)
-            if (headers == null || headers.isEmpty())
+            if (headers.isNullOrEmpty())
                 return@let null
 
             fetchService.getTableData(
