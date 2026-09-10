@@ -2,6 +2,7 @@ package dustgrain.core.formatting
 
 import dustgrain.core.ApiMockTest
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
 import one.cheily.dustgrain.core.domain.DataField
@@ -151,6 +152,21 @@ class FormattingServiceMockTest : ApiMockTest({
             // then
             result.header.name shouldBeEqual data.header.name
             result.contents shouldBeEqual listOf("Air Tech +21 [+5]")
+        }
+
+
+        scenario("parses list content") {
+            // given
+            val wikitext = someListDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(";"),
+                content = "Invincibility is through all active frames;Hold button for more hits, min. 3, max. 11;Chip damage 30% (42×N)"
+            )
+
+            // when
+            val result = mockFormattingService.format(wikitext)
+
+            // then
+            result.contents.shouldContainInOrder("Invincibility is through all active frames", "Hold button for more hits, min. 3, max. 11", "Chip damage 30% (42×N)")
         }
     }
 
