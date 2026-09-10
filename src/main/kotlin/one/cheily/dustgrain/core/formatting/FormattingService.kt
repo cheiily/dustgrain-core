@@ -13,7 +13,8 @@ import one.cheily.dustgrain.core.domain.DataSpike
 import one.cheily.dustgrain.core.domain.DataStruct
 
 class FormattingService(
-    val dataFetchService: DataFetchService = Application.dataFetchService
+    val dataFetchService: DataFetchService = Application.dataFetchService,
+    val wikitextSanitizer: WikitextSanitizer = WikitextSanitizer()
 ) {
     val logger = KotlinLogging.logger{}
 
@@ -70,9 +71,10 @@ class FormattingService(
     }
 
     val formatWikitext = Formatter { data ->
-        logger.warn { "wikitext formatting is a TODO feature" }
-        formatPass.format(data)
-//        TODO("See issue #14")
+        DataGrain(
+            header = data.header,
+            contents = data.parseList(data.content).map(wikitextSanitizer::toPlainText)
+        )
     }
 
 
@@ -93,4 +95,3 @@ class FormattingService(
             content.split(header.delimiter)
 
 }
-
