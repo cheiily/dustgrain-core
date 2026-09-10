@@ -154,18 +154,74 @@ class FormattingServiceMockTest : ApiMockTest({
             result.contents shouldBeEqual listOf("Air Tech +21 [+5]")
         }
 
-        scenario("applies all sanitizer transformations") {
+        scenario("decodes escaped entities") {
             // given
-            val data = someListDataField.copy(
-                header = FormatterRef.WIKITEXT.toSomeDataHeader(";"),
-                content = "&#039;quoted&#039;;''bold'' text;[[Move Page|Move Label]];[ +5 ];  many   spaces\tand\nlines  "
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "&#039;quoted&#039;"
             )
 
             // when
             val result = mockFormattingService.formatWikitext.format(data)
 
             // then
-            result.contents shouldBeEqual listOf("'quoted'", "bold text", "Move Label", "[+5]", "many spaces and lines")
+            result.contents shouldBeEqual listOf("'quoted'")
+        }
+
+        scenario("removes wiki emphasis markers") {
+            // given
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "''bold'' text"
+            )
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
+
+            // then
+            result.contents shouldBeEqual listOf("bold text")
+        }
+
+        scenario("normalizes wiki links") {
+            // given
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "[[Move Page|Move Label]]"
+            )
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
+
+            // then
+            result.contents shouldBeEqual listOf("Move Label")
+        }
+
+        scenario("normalizes bracket spacing") {
+            // given
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "[ +5 ]"
+            )
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
+
+            // then
+            result.contents shouldBeEqual listOf("[+5]")
+        }
+
+        scenario("normalizes whitespace") {
+            // given
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "  many   spaces\tand\nlines  "
+            )
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
+
+            // then
+            result.contents shouldBeEqual listOf("many spaces and lines")
         }
 
 
