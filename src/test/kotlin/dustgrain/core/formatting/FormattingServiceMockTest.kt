@@ -154,6 +154,20 @@ class FormattingServiceMockTest : ApiMockTest({
             result.contents shouldBeEqual listOf("Air Tech +21 [+5]")
         }
 
+        scenario("applies all sanitizer transformations") {
+            // given
+            val data = someListDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(";"),
+                content = "&#039;quoted&#039;;''bold'' text;[[Move Page|Move Label]];[ +5 ];  many   spaces\tand\nlines  "
+            )
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
+
+            // then
+            result.contents shouldBeEqual listOf("'quoted'", "bold text", "Move Label", "[+5]", "many spaces and lines")
+        }
+
 
         scenario("parses list content") {
             // given
