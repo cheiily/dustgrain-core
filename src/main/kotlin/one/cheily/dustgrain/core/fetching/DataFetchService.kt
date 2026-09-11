@@ -1,10 +1,10 @@
 package one.cheily.dustgrain.core.fetching
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.runBlocking
 import one.cheily.dustgrain.core.Application
 import one.cheily.dustgrain.core.domain.DataHeader
 import one.cheily.dustgrain.core.formatting.FormatterRef
-import kotlinx.coroutines.runBlocking
 
 class DataFetchService(
     var client: DustloopClient = DustloopClient(Application.httpClient)

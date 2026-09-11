@@ -1,19 +1,16 @@
 package one.cheily.dustgrain.core.formatting
 
-import one.cheily.dustgrain.core.domain.DataField
-import one.cheily.dustgrain.core.domain.DataGrain
-import one.cheily.dustgrain.core.domain.DataHeader
-import one.cheily.dustgrain.core.fetching.DataFetchService
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import one.cheily.dustgrain.core.Application
-import one.cheily.dustgrain.core.domain.DataSpike
-import one.cheily.dustgrain.core.domain.DataStruct
+import one.cheily.dustgrain.core.domain.*
+import one.cheily.dustgrain.core.fetching.DataFetchService
 
 class FormattingService(
-    val dataFetchService: DataFetchService = Application.dataFetchService
+    val dataFetchService: DataFetchService = Application.dataFetchService,
+    val wikitextSanitizer: WikitextSanitizer = WikitextSanitizer()
 ) {
     val logger = KotlinLogging.logger{}
 
@@ -70,9 +67,10 @@ class FormattingService(
     }
 
     val formatWikitext = Formatter { data ->
-        logger.warn { "wikitext formatting is a TODO feature" }
-        formatPass.format(data)
-//        TODO("See issue #14")
+        DataGrain(
+            header = data.header,
+            contents = data.parseList(data.content).map(wikitextSanitizer::toPlainText)
+        )
     }
 
 
@@ -93,4 +91,3 @@ class FormattingService(
             content.split(header.delimiter)
 
 }
-

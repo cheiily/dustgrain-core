@@ -2,6 +2,7 @@ package dustgrain.core.formatting
 
 import dustgrain.core.ApiMockTest
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
 import one.cheily.dustgrain.core.domain.DataField
@@ -140,14 +141,102 @@ class FormattingServiceMockTest : ApiMockTest({
     feature("FormattingService#formatWikitext") {
         scenario("parses content as plain text") {
             // given
-            val data = someSingleDataField.copy(header = FormatterRef.WIKITEXT.toSomeDataHeader())
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "Air Tech &lt;span style=&quot;color: #4475ff&quot; &gt;&#039;&#039;&#039;+21&#039;&#039;&#039;&lt;/span&gt; [&lt;span style=&quot;color: #00d7c0&quot; &gt;&#039;&#039;&#039;+5&#039;&#039;&#039;&lt;/span&gt;]"
+            )
 
             // when
             val result = mockFormattingService.formatWikitext.format(data)
 
             // then
             result.header.name shouldBeEqual data.header.name
-            result.contents shouldBeEqual listOf(data.content)
+            result.contents shouldBeEqual listOf("Air Tech +21 [+5]")
+        }
+
+        scenario("decodes escaped entities") {
+            // given
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "&#039;quoted&#039;"
+            )
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
+
+            // then
+            result.contents shouldBeEqual listOf("'quoted'")
+        }
+
+        scenario("removes wiki emphasis markers") {
+            // given
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "''bold'' text"
+            )
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
+
+            // then
+            result.contents shouldBeEqual listOf("bold text")
+        }
+
+        scenario("normalizes wiki links") {
+            // given
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "[[Move Page|Move Label]]"
+            )
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
+
+            // then
+            result.contents shouldBeEqual listOf("Move Label")
+        }
+
+        scenario("normalizes bracket spacing") {
+            // given
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "[ +5 ]"
+            )
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
+
+            // then
+            result.contents shouldBeEqual listOf("[+5]")
+        }
+
+        scenario("normalizes whitespace") {
+            // given
+            val data = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "  many   spaces\tand\nlines  "
+            )
+
+            // when
+            val result = mockFormattingService.formatWikitext.format(data)
+
+            // then
+            result.contents shouldBeEqual listOf("many spaces and lines")
+        }
+
+
+        scenario("parses list content") {
+            // given
+            val wikitext = someListDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(";"),
+                content = "Invincibility is through all active frames;Hold button for more hits, min. 3, max. 11;Chip damage 30% (42×N)"
+            )
+
+            // when
+            val result = mockFormattingService.format(wikitext)
+
+            // then
+result.contents shouldBeEqual listOf("Invincibility is through all active frames", "Hold button for more hits, min. 3, max. 11", "Chip damage 30% (42×N)")
         }
     }
 
@@ -158,21 +247,23 @@ class FormattingServiceMockTest : ApiMockTest({
             val dataPass = someSingleDataField.copy(header = FormatterRef.PASS.toSomeDataHeader())
             val dataError = someSingleDataField.copy(header = FormatterRef.PASS_ERROR.toSomeDataHeader())
             val dataImage = someSingleDataField.copy(header = FormatterRef.IMAGE.toSomeDataHeader())
-            // todo #14
-//            val dataWikitext = someSingleDataField.copy(header = FormatterRef.WIKITEXT.toSomeDataHeader())
+            val dataWikitext = someSingleDataField.copy(
+                header = FormatterRef.WIKITEXT.toSomeDataHeader(),
+                content = "&lt;span style=&quot;color: Tomato&quot; &gt;&#039;&#039;&#039;-2&#039;&#039;&#039;&lt;/span&gt;"
+            )
 
             // when
             val resultPass = mockFormattingService.format(dataPass)
             val resultError = mockFormattingService.format(dataError)
             val resultImage = mockFormattingService.format(dataImage)
-//            val resultWikitext = mockFormattingService.format(dataWikitext)
+            val resultWikitext = mockFormattingService.format(dataWikitext)
 
 
             // then
             resultPass.contents shouldBeEqual listOf(someSingleDataField.content)
             resultError.contents shouldBeEqual listOf(someSingleDataField.content)
             resultImage.contents shouldBeEqual listOf("https://www.dustloop.com/wiki/images/e/e8/BBCF_Noel_Vermillion_d623D.png")
-//            resultWikitext.contents shouldBeEqual listOf(someSingleDataField.content)
+            resultWikitext.contents shouldBeEqual listOf("-2")
         }
     }
 

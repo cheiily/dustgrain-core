@@ -1,8 +1,8 @@
 package one.cheily.dustgrain.core
 
+import io.ktor.client.plugins.*
+import io.ktor.client.statement.*
 import one.cheily.dustgrain.core.fetching.DustloopErrorResponse
-import io.ktor.client.plugins.ResponseException
-import io.ktor.client.statement.HttpResponse
 
 class DustloopErrorException(
     httpResponse: HttpResponse,
