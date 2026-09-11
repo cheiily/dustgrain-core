@@ -4,14 +4,12 @@ import kotlinx.coroutines.runBlocking
 import one.cheily.dustgrain.core.Application
 import one.cheily.dustgrain.core.cache.DataHeaderCache
 import one.cheily.dustgrain.core.domain.DataField
-import one.cheily.dustgrain.core.domain.DataGrain
 import one.cheily.dustgrain.core.domain.DataHeader
 import one.cheily.dustgrain.core.domain.DataSpike
 import one.cheily.dustgrain.core.domain.DataStruct
 import one.cheily.dustgrain.core.fetching.DataFetchService
 import one.cheily.dustgrain.core.fetching.TableDataRequest
 import one.cheily.dustgrain.core.formatting.FormattingService
-import kotlin.collections.listOf
 
 data class GameModule(
     val game: String,

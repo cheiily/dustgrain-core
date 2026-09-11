@@ -1,16 +1,12 @@
 package one.cheily.dustgrain.core.formatting
 
-import one.cheily.dustgrain.core.domain.DataField
-import one.cheily.dustgrain.core.domain.DataGrain
-import one.cheily.dustgrain.core.domain.DataHeader
-import one.cheily.dustgrain.core.fetching.DataFetchService
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import one.cheily.dustgrain.core.Application
-import one.cheily.dustgrain.core.domain.DataSpike
-import one.cheily.dustgrain.core.domain.DataStruct
+import one.cheily.dustgrain.core.domain.*
+import one.cheily.dustgrain.core.fetching.DataFetchService
 
 class FormattingService(
     val dataFetchService: DataFetchService = Application.dataFetchService,

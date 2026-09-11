@@ -1,7 +1,7 @@
 package one.cheily.dustgrain.core.domain
 
-import one.cheily.dustgrain.core.formatting.FormatterRef
 import kotlinx.serialization.Serializable
+import one.cheily.dustgrain.core.formatting.FormatterRef
 
 @Serializable
 data class DataHeader(

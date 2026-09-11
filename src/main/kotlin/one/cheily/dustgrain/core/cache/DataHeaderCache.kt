@@ -1,10 +1,10 @@
 package one.cheily.dustgrain.core.cache
 
+import net.harawata.appdirs.AppDirsFactory
 import one.cheily.dustgrain.core.Application
 import one.cheily.dustgrain.core.config.AppConfig
 import one.cheily.dustgrain.core.domain.DataHeader
 import one.cheily.dustgrain.core.fetching.DataFetchService
-import net.harawata.appdirs.AppDirsFactory
 import java.nio.file.Path
 
 typealias DataHeaderCache = SuspendingKVCache<String, List<DataHeader>>

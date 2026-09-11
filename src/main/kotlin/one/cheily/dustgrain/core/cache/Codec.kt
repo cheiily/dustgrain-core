@@ -1,9 +1,9 @@
 package one.cheily.dustgrain.core.cache
 
 import kotlinx.serialization.KSerializer
-import one.cheily.dustgrain.core.domain.DataHeader
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
+import one.cheily.dustgrain.core.domain.DataHeader
 
 fun interface Encoder<T, R> {
     fun encode(value: T): R

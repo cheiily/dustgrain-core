@@ -1,18 +1,17 @@
 package one.cheily.dustgrain.core.config
 
-import one.cheily.dustgrain.core.Application
-import one.cheily.dustgrain.core.DustloopErrorException
-import one.cheily.dustgrain.core.fetching.DustloopErrorResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.JsonConvertException
+import io.ktor.serialization.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.util.*
 import kotlinx.serialization.json.Json
-import one.cheily.dustgrain.core.DustloopApiException
+import one.cheily.dustgrain.core.Application
+import one.cheily.dustgrain.core.DustloopErrorException
+import one.cheily.dustgrain.core.fetching.DustloopErrorResponse
 
 fun getHttpClient(
     appProfile: AppProfile = Application.profile,
