@@ -236,7 +236,7 @@ class FormattingServiceMockTest : ApiMockTest({
             val result = mockFormattingService.format(wikitext)
 
             // then
-            result.contents.shouldContainInOrder("Invincibility is through all active frames", "Hold button for more hits, min. 3, max. 11", "Chip damage 30% (42×N)")
+result.contents shouldBeEqual listOf("Invincibility is through all active frames", "Hold button for more hits, min. 3, max. 11", "Chip damage 30% (42×N)")
         }
     }
 
